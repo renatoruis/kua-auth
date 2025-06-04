@@ -1,9 +1,9 @@
-# Production values for kube-user-admin
+# Production values for kua-auth
 # Copy this file and adjust for your production environment
 
 # Image settings
 image:
-  repository: renatoruis/kube-user-admin
+  repository: renatoruis/kua-auth
   tag: "latest"  # Use specific version in production, e.g., "v1.0.0"
   pullPolicy: IfNotPresent
 
@@ -15,7 +15,7 @@ backend:
   env:
     ADMIN_PASSWORD: "change-me-in-production"
     JWT_SECRET: "your-super-secret-jwt-key-here"
-    DEFAULT_NAMESPACE: "kube-user-admin"
+    DEFAULT_NAMESPACE: "kua-auth"
     NODE_ENV: production
   
   resources:
@@ -123,5 +123,5 @@ affinity: {}
   #         - key: app.kubernetes.io/name
   #           operator: In
   #           values:
-  #           - kube-user-admin
+  #           - kua-auth
   #       topologyKey: kubernetes.io/hostname 

@@ -2,16 +2,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "kube-user-admin.fullname" . }}-frontend
+  name: {{ include "kua-auth.fullname" . }}-frontend
   labels:
-    {{- include "kube-user-admin.frontend.labels" . | nindent 4 }}
+    {{- include "kua-auth.frontend.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.frontend.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "kube-user-admin.frontend.selectorLabels" . | nindent 6 }}
+      {{- include "kua-auth.frontend.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -19,7 +19,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "kube-user-admin.frontend.selectorLabels" . | nindent 8 }}
+        {{- include "kua-auth.frontend.selectorLabels" . | nindent 8 }}
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -34,7 +34,7 @@ spec:
         - name: {{ .Values.frontend.name }}
           securityContext:
             {{- toYaml .Values.frontend.securityContext | nindent 12 }}
-          image: {{ include "kube-user-admin.frontend.image" . }}
+          image: {{ include "kua-auth.frontend.image" . }}
           imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
           ports:
             - name: {{ .Values.frontend.service.name }}
@@ -42,7 +42,7 @@ spec:
               protocol: TCP
           env:
             - name: VUE_APP_API_BASE_URL
-              value: {{ include "kube-user-admin.backend.url" . }}
+              value: {{ include "kua-auth.backend.url" . }}
           {{- with .Values.frontend.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}

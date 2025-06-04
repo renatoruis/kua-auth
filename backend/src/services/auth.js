@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 // Default admin password if not set in environment
 const DEFAULT_ADMIN_PASSWORD = 'admin';
 // JWT secret key - in production, should be a strong, randomly generated value
-const JWT_SECRET = process.env.JWT_SECRET || 'kube-user-admin-secret';
+const JWT_SECRET = process.env.JWT_SECRET || 'kua-auth-secret';
 // Token expiration time
 const TOKEN_EXPIRES_IN = '24h';
 

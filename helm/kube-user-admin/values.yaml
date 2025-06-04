@@ -1,4 +1,4 @@
-# Default values for kube-user-admin.
+# Default values for kua-auth.
 # This is a YAML-formatted file.
 
 # Global settings
@@ -9,7 +9,7 @@ global:
 # Image settings
 image:
   registry: ghcr.io
-  repository: renatoruis/kube-user-admin
+  repository: renatoruis/kua-auth
   tag: "latest"
   pullPolicy: IfNotPresent
 
@@ -67,9 +67,9 @@ backend:
   # Environment variables
   env:
     NODE_ENV: production
-    DEFAULT_NAMESPACE: kube-user-admin
+    DEFAULT_NAMESPACE: kua-auth
     ADMIN_PASSWORD: admin
-    JWT_SECRET: kube-user-admin-secret-change-in-production
+    JWT_SECRET: kua-auth-secret-change-in-production
     PORT: "3000"
   
   # Security context
@@ -164,7 +164,7 @@ ingress:
     # kubernetes.io/tls-acme: "true"
     # cert-manager.io/cluster-issuer: letsencrypt-prod
   hosts:
-    - host: kube-user-admin.local
+    - host: kua-auth.local
       paths:
         - path: /
           pathType: Prefix
@@ -173,9 +173,9 @@ ingress:
           pathType: Prefix
           service: backend
   tls: []
-  #  - secretName: kube-user-admin-tls
+  #  - secretName: kua-auth-tls
   #    hosts:
-  #      - kube-user-admin.local
+  #      - kua-auth.local
 
 # Pod Disruption Budget
 podDisruptionBudget:

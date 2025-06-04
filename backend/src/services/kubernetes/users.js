@@ -168,8 +168,8 @@ const deleteServiceAccount = async (name, namespace = DEFAULT_APP_NAMESPACE) => 
     const saOutput = await execKubectl(`get serviceaccount ${name} -n ${namespace} -o json`);
     const sa = JSON.parse(saOutput);
     
-    if (!sa.metadata.labels || sa.metadata.labels['app.kubernetes.io/managed-by'] !== 'kube-user-admin') {
-      throw new Error(`Service account ${name} is not managed by kube-user-admin. Deletion blocked for safety.`);
+    if (!sa.metadata.labels || sa.metadata.labels['app.kubernetes.io/managed-by'] !== 'kua-auth') {
+      throw new Error(`Service account ${name} is not managed by kua-auth. Deletion blocked for safety.`);
     }
     
     // Also delete associated roles and rolebindings managed by this app for this SA
@@ -238,8 +238,8 @@ const getServiceAccountToken = async (serviceAccountName, namespace = DEFAULT_AP
         }
       }
       
-      if (!sa.metadata.labels || sa.metadata.labels['app.kubernetes.io/managed-by'] !== 'kube-user-admin') {
-        throw new Error(`Service account ${serviceAccountName} is not managed by kube-user-admin. Token generation blocked for safety.`);
+      if (!sa.metadata.labels || sa.metadata.labels['app.kubernetes.io/managed-by'] !== 'kua-auth') {
+        throw new Error(`Service account ${serviceAccountName} is not managed by kua-auth. Token generation blocked for safety.`);
       }
     } catch (error) {
       console.error(`Error verifying service account: ${error.message}`);
@@ -355,7 +355,7 @@ const generateKubeconfig = async (serviceAccountName, namespace = DEFAULT_APP_NA
       const saOutput = await execKubectl(`get serviceaccount ${serviceAccountName} -n ${namespace} -o json`);
       const sa = JSON.parse(saOutput);
       
-      if (!sa.metadata.labels || sa.metadata.labels['app.kubernetes.io/managed-by'] !== 'kube-user-admin') {
+      if (!sa.metadata.labels || sa.metadata.labels['app.kubernetes.io/managed-by'] !== 'kua-auth') {
         throw new Error(`ServiceAccount ${serviceAccountName} is not managed by this application. Kubeconfig generation blocked.`);
       }
     } catch (error) {

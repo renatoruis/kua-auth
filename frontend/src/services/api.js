@@ -5,7 +5,7 @@ import { ref, computed } from 'vue'; // Import ref and computed from Vue
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 const TOKEN_KEY = 'jwt_token';
-const DEFAULT_APP_NAMESPACE = 'kube-user-admin'; // Adicionar constante para namespace padrão
+const DEFAULT_APP_NAMESPACE = 'kua-auth'; // Adicionar constante para namespace padrão
 
 // --- Reactive Token Management ---
 const authToken = ref(localStorage.getItem(TOKEN_KEY));

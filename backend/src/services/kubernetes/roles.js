@@ -15,17 +15,17 @@ const getRoles = async (namespace = '') => {
     let command;
     if (namespace) {
       // Buscando roles gerenciadas pelo app neste namespace específico
-      command = `get roles -n ${namespace} -l app.kubernetes.io/managed-by=kube-user-admin -o json`;
+      command = `get roles -n ${namespace} -l app.kubernetes.io/managed-by=kua-auth -o json`;
     } else {
       // Buscando todas as roles gerenciadas pelo app em todos os namespaces
-      command = `get roles --all-namespaces -l app.kubernetes.io/managed-by=kube-user-admin -o json`;
+      command = `get roles --all-namespaces -l app.kubernetes.io/managed-by=kua-auth -o json`;
     }
     
     const output = await execKubectl(command);
     const data = JSON.parse(output);
     
     if (data && data.items) {
-      console.log(`Found ${data.items.length} roles${namespace ? ` in namespace ${namespace}` : ''} managed by kube-user-admin`);
+      console.log(`Found ${data.items.length} roles${namespace ? ` in namespace ${namespace}` : ''} managed by kua-auth`);
       return data.items;
     }
     
@@ -42,11 +42,11 @@ const getClusterRoles = async () => {
   
   try {
     // Buscando cluster roles gerenciadas pelo app
-    const output = await execKubectl(`get clusterroles -l app.kubernetes.io/managed-by=kube-user-admin -o json`);
+    const output = await execKubectl(`get clusterroles -l app.kubernetes.io/managed-by=kua-auth -o json`);
     const data = JSON.parse(output);
     
     if (data && data.items) {
-      console.log(`Found ${data.items.length} cluster roles managed by kube-user-admin`);
+      console.log(`Found ${data.items.length} cluster roles managed by kua-auth`);
       return data.items;
     }
     
@@ -115,7 +115,7 @@ const createRoleBinding = async (name, namespace = DEFAULT_APP_NAMESPACE, roleNa
     
     // Add management label
     try {
-      await execKubectl(`label rolebinding ${name} -n ${namespace} app.kubernetes.io/managed-by=kube-user-admin`);
+      await execKubectl(`label rolebinding ${name} -n ${namespace} app.kubernetes.io/managed-by=kua-auth`);
       console.log(`Added management label to RoleBinding ${name}`);
     } catch (labelError) {
       console.warn(`Could not add management label to RoleBinding ${name}: ${labelError.message}`);
@@ -146,8 +146,8 @@ const createClusterRoleBinding = async (name, clusterRoleName, serviceAccountNam
       const crOutput = await execKubectl(`get clusterrole ${clusterRoleName} -o json`);
       const cr = JSON.parse(crOutput);
       
-      if (!cr.metadata.labels || cr.metadata.labels['app.kubernetes.io/managed-by'] !== 'kube-user-admin') {
-        throw new Error(`ClusterRole ${clusterRoleName} is not managed by kube-user-admin and is not a standard role. Cluster role binding creation blocked for safety.`);
+      if (!cr.metadata.labels || cr.metadata.labels['app.kubernetes.io/managed-by'] !== 'kua-auth') {
+        throw new Error(`ClusterRole ${clusterRoleName} is not managed by kua-auth and is not a standard role. Cluster role binding creation blocked for safety.`);
       }
     } catch (error) {
       console.error(`Error verifying cluster role: ${error.message}`);
@@ -160,8 +160,8 @@ const createClusterRoleBinding = async (name, clusterRoleName, serviceAccountNam
     const saOutput = await execKubectl(`get serviceaccount ${serviceAccountName} -n ${namespace} -o json`);
     const sa = JSON.parse(saOutput);
     
-    if (!sa.metadata.labels || sa.metadata.labels['app.kubernetes.io/managed-by'] !== 'kube-user-admin') {
-      throw new Error(`Service account ${serviceAccountName} is not managed by kube-user-admin. Cluster role binding creation blocked for safety.`);
+    if (!sa.metadata.labels || sa.metadata.labels['app.kubernetes.io/managed-by'] !== 'kua-auth') {
+      throw new Error(`Service account ${serviceAccountName} is not managed by kua-auth. Cluster role binding creation blocked for safety.`);
     }
   } catch (error) {
     console.error(`Error verifying service account: ${error.message}`);
@@ -225,8 +225,8 @@ const updateRole = async (name, namespace, rules) => {
   try {
     const existingRoleOutput = await execKubectl(`get role ${name} -n ${namespace} -o json`);
     const existingRole = JSON.parse(existingRoleOutput);
-    if (!existingRole.metadata.labels || existingRole.metadata.labels['app.kubernetes.io/managed-by'] !== 'kube-user-admin') {
-      throw new Error(`Role ${name} in namespace ${namespace} is not managed by kube-user-admin. Update blocked.`);
+    if (!existingRole.metadata.labels || existingRole.metadata.labels['app.kubernetes.io/managed-by'] !== 'kua-auth') {
+      throw new Error(`Role ${name} in namespace ${namespace} is not managed by kua-auth. Update blocked.`);
     }
   } catch (error) {
     console.error(`Error verifying role before update: ${error.message}`);
@@ -275,8 +275,8 @@ const deleteRole = async (name, namespace) => {
   try {
     const roleOutput = await execKubectl(`get role ${name} -n ${namespace} -o json`);
     const role = JSON.parse(roleOutput);
-    if (!role.metadata.labels || role.metadata.labels['app.kubernetes.io/managed-by'] !== 'kube-user-admin') {
-      throw new Error(`Role ${name} in namespace ${namespace} is not managed by kube-user-admin. Deletion blocked.`);
+    if (!role.metadata.labels || role.metadata.labels['app.kubernetes.io/managed-by'] !== 'kua-auth') {
+      throw new Error(`Role ${name} in namespace ${namespace} is not managed by kua-auth. Deletion blocked.`);
     }
   } catch (error) {
     console.error(`Error verifying role before deletion: ${error.message}`);
@@ -310,8 +310,8 @@ const updateRoleBinding = async (name, namespace, roleName, serviceAccountName, 
   try {
     const existingRbOutput = await execKubectl(`get rolebinding ${name} -n ${namespace} -o json`);
     const existingRb = JSON.parse(existingRbOutput);
-    if (!existingRb.metadata.labels || existingRb.metadata.labels['app.kubernetes.io/managed-by'] !== 'kube-user-admin') {
-      throw new Error(`RoleBinding ${name} in namespace ${namespace} is not managed by kube-user-admin. Update blocked.`);
+    if (!existingRb.metadata.labels || existingRb.metadata.labels['app.kubernetes.io/managed-by'] !== 'kua-auth') {
+      throw new Error(`RoleBinding ${name} in namespace ${namespace} is not managed by kua-auth. Update blocked.`);
     }
   } catch (error) {
     console.error(`Error verifying role binding before update: ${error.message}`);
@@ -323,17 +323,17 @@ const updateRoleBinding = async (name, namespace, roleName, serviceAccountName, 
     if (roleKind === 'Role') {
       const roleOutput = await execKubectl(`get role ${roleName} -n ${namespace} -o json`);
       const role = JSON.parse(roleOutput);
-      if (!role.metadata.labels || role.metadata.labels['app.kubernetes.io/managed-by'] !== 'kube-user-admin') {
-        throw new Error(`Role ${roleName} is not managed by kube-user-admin. Update blocked.`);
+      if (!role.metadata.labels || role.metadata.labels['app.kubernetes.io/managed-by'] !== 'kua-auth') {
+        throw new Error(`Role ${roleName} is not managed by kua-auth. Update blocked.`);
       }
     } else { // ClusterRole
       const crOutput = await execKubectl(`get clusterrole ${roleName} -o json`);
       const cr = JSON.parse(crOutput);
-      if (!cr.metadata.labels || cr.metadata.labels['app.kubernetes.io/managed-by'] !== 'kube-user-admin') {
+      if (!cr.metadata.labels || cr.metadata.labels['app.kubernetes.io/managed-by'] !== 'kua-auth') {
         // Allow built-in cluster roles
         const builtInRoles = ['view', 'edit', 'admin', 'cluster-admin'];
         if (!builtInRoles.includes(roleName)) {
-          throw new Error(`ClusterRole ${roleName} is not managed by kube-user-admin. Update blocked.`);
+          throw new Error(`ClusterRole ${roleName} is not managed by kua-auth. Update blocked.`);
         }
       }
     }
@@ -344,8 +344,8 @@ const updateRoleBinding = async (name, namespace, roleName, serviceAccountName, 
   try {
     const saOutput = await execKubectl(`get serviceaccount ${serviceAccountName} -n ${serviceAccountNamespace} -o json`);
     const sa = JSON.parse(saOutput);
-    if (!sa.metadata.labels || sa.metadata.labels['app.kubernetes.io/managed-by'] !== 'kube-user-admin') {
-      throw new Error(`ServiceAccount ${serviceAccountName} is not managed by kube-user-admin. Update blocked.`);
+    if (!sa.metadata.labels || sa.metadata.labels['app.kubernetes.io/managed-by'] !== 'kua-auth') {
+      throw new Error(`ServiceAccount ${serviceAccountName} is not managed by kua-auth. Update blocked.`);
     }
   } catch (error) {
     throw new Error(`Error verifying service account for binding update: ${error.message}`);
@@ -427,8 +427,8 @@ const deleteClusterRole = async (name) => {
   try {
     const clusterRoleOutput = await execKubectl(`get clusterrole ${name} -o json`);
     const clusterRole = JSON.parse(clusterRoleOutput);
-    if (!clusterRole.metadata.labels || clusterRole.metadata.labels['app.kubernetes.io/managed-by'] !== 'kube-user-admin') {
-      throw new Error(`ClusterRole ${name} is not managed by kube-user-admin. Deletion blocked.`);
+    if (!clusterRole.metadata.labels || clusterRole.metadata.labels['app.kubernetes.io/managed-by'] !== 'kua-auth') {
+      throw new Error(`ClusterRole ${name} is not managed by kua-auth. Deletion blocked.`);
     }
   } catch (error) {
     console.error(`Error verifying cluster role before deletion: ${error.message}`);
@@ -457,8 +457,8 @@ const deleteRoleBinding = async (name, namespace) => {
   try {
     const roleBindingOutput = await execKubectl(`get rolebinding ${name} -n ${namespace} -o json`);
     const roleBinding = JSON.parse(roleBindingOutput);
-    if (!roleBinding.metadata.labels || roleBinding.metadata.labels['app.kubernetes.io/managed-by'] !== 'kube-user-admin') {
-      throw new Error(`RoleBinding ${name} in namespace ${namespace} is not managed by kube-user-admin. Deletion blocked.`);
+    if (!roleBinding.metadata.labels || roleBinding.metadata.labels['app.kubernetes.io/managed-by'] !== 'kua-auth') {
+      throw new Error(`RoleBinding ${name} in namespace ${namespace} is not managed by kua-auth. Deletion blocked.`);
     }
   } catch (error) {
     console.error(`Error verifying role binding before deletion: ${error.message}`);
@@ -487,8 +487,8 @@ const deleteClusterRoleBinding = async (name) => {
   try {
     const clusterRoleBindingOutput = await execKubectl(`get clusterrolebinding ${name} -o json`);
     const clusterRoleBinding = JSON.parse(clusterRoleBindingOutput);
-    if (!clusterRoleBinding.metadata.labels || clusterRoleBinding.metadata.labels['app.kubernetes.io/managed-by'] !== 'kube-user-admin') {
-      throw new Error(`ClusterRoleBinding ${name} is not managed by kube-user-admin. Deletion blocked.`);
+    if (!clusterRoleBinding.metadata.labels || clusterRoleBinding.metadata.labels['app.kubernetes.io/managed-by'] !== 'kua-auth') {
+      throw new Error(`ClusterRoleBinding ${name} is not managed by kua-auth. Deletion blocked.`);
     }
   } catch (error) {
     console.error(`Error verifying cluster role binding before deletion: ${error.message}`);

@@ -37,11 +37,11 @@ jobs:
 
       - name: Package Helm Chart
         run: |
-          helm package helm/kube-user-admin --destination docs/
+          helm package helm/kua-auth --destination docs/
 
       - name: Generate Chart Index
         run: |
-          helm repo index docs --url https://renatoruis.github.io/kube-user-admin
+          helm repo index docs --url https://renatoruis.github.io/kua-auth
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3

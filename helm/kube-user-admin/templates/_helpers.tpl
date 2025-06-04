@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "kube-user-admin.name" -}}
+{{- define "kua-auth.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "kube-user-admin.fullname" -}}
+{{- define "kua-auth.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "kube-user-admin.chart" -}}
+{{- define "kua-auth.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "kube-user-admin.labels" -}}
-helm.sh/chart: {{ include "kube-user-admin.chart" . }}
-{{ include "kube-user-admin.selectorLabels" . }}
+{{- define "kua-auth.labels" -}}
+helm.sh/chart: {{ include "kua-auth.chart" . }}
+{{ include "kua-auth.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,49 +45,49 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "kube-user-admin.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "kube-user-admin.name" . }}
+{{- define "kua-auth.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "kua-auth.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Backend labels
 */}}
-{{- define "kube-user-admin.backend.labels" -}}
-{{ include "kube-user-admin.labels" . }}
+{{- define "kua-auth.backend.labels" -}}
+{{ include "kua-auth.labels" . }}
 app.kubernetes.io/component: backend
 {{- end }}
 
 {{/*
 Backend selector labels
 */}}
-{{- define "kube-user-admin.backend.selectorLabels" -}}
-{{ include "kube-user-admin.selectorLabels" . }}
+{{- define "kua-auth.backend.selectorLabels" -}}
+{{ include "kua-auth.selectorLabels" . }}
 app.kubernetes.io/component: backend
 {{- end }}
 
 {{/*
 Frontend labels
 */}}
-{{- define "kube-user-admin.frontend.labels" -}}
-{{ include "kube-user-admin.labels" . }}
+{{- define "kua-auth.frontend.labels" -}}
+{{ include "kua-auth.labels" . }}
 app.kubernetes.io/component: frontend
 {{- end }}
 
 {{/*
 Frontend selector labels
 */}}
-{{- define "kube-user-admin.frontend.selectorLabels" -}}
-{{ include "kube-user-admin.selectorLabels" . }}
+{{- define "kua-auth.frontend.selectorLabels" -}}
+{{ include "kua-auth.selectorLabels" . }}
 app.kubernetes.io/component: frontend
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "kube-user-admin.serviceAccountName" -}}
+{{- define "kua-auth.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "kube-user-admin.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "kua-auth.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
@@ -96,7 +96,7 @@ Create the name of the service account to use
 {{/*
 Create backend image name
 */}}
-{{- define "kube-user-admin.backend.image" -}}
+{{- define "kua-auth.backend.image" -}}
 {{- if .Values.image.registry }}
 {{- printf "%s/%s-%s:%s" .Values.image.registry .Values.image.repository .Values.backend.image.repository (.Values.backend.image.tag | default .Values.image.tag) }}
 {{- else }}
@@ -107,7 +107,7 @@ Create backend image name
 {{/*
 Create frontend image name
 */}}
-{{- define "kube-user-admin.frontend.image" -}}
+{{- define "kua-auth.frontend.image" -}}
 {{- if .Values.image.registry }}
 {{- printf "%s/%s-%s:%s" .Values.image.registry .Values.image.repository .Values.frontend.image.repository (.Values.frontend.image.tag | default .Values.image.tag) }}
 {{- else }}
@@ -118,6 +118,6 @@ Create frontend image name
 {{/*
 Create backend API URL for frontend
 */}}
-{{- define "kube-user-admin.backend.url" -}}
-{{- printf "http://%s-backend:%d" (include "kube-user-admin.fullname" .) (.Values.backend.service.port | int) }}
+{{- define "kua-auth.backend.url" -}}
+{{- printf "http://%s-backend:%d" (include "kua-auth.fullname" .) (.Values.backend.service.port | int) }}
 {{- end }} 

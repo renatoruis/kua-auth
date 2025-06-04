@@ -14,12 +14,12 @@ O pipeline é executado automaticamente quando:
 As seguintes imagens são construídas e publicadas:
 
 ### Frontend
-- **Registry:** `ghcr.io/[seu-usuario]/kube-user-admin-frontend`
+- **Registry:** `ghcr.io/[seu-usuario]/kua-auth-frontend`
 - **Tecnologia:** Vue.js + Vite
 - **Porta:** 80
 
 ### Backend
-- **Registry:** `ghcr.io/[seu-usuario]/kube-user-admin-backend`
+- **Registry:** `ghcr.io/[seu-usuario]/kua-auth-backend`
 - **Tecnologia:** Node.js + Express
 - **Porta:** 3000
 
@@ -38,10 +38,10 @@ O pipeline gera automaticamente as seguintes tags:
 
 ```bash
 # Frontend
-docker pull ghcr.io/[seu-usuario]/kube-user-admin-frontend:latest
+docker pull ghcr.io/[seu-usuario]/kua-auth-frontend:latest
 
 # Backend
-docker pull ghcr.io/[seu-usuario]/kube-user-admin-backend:latest
+docker pull ghcr.io/[seu-usuario]/kua-auth-backend:latest
 ```
 
 ### Executar Localmente
@@ -51,13 +51,13 @@ docker pull ghcr.io/[seu-usuario]/kube-user-admin-backend:latest
 docker run -d \
   --name kube-admin-backend \
   -p 3000:3000 \
-  ghcr.io/[seu-usuario]/kube-user-admin-backend:latest
+  ghcr.io/[seu-usuario]/kua-auth-backend:latest
 
 # Frontend
 docker run -d \
   --name kube-admin-frontend \
   -p 8080:80 \
-  ghcr.io/[seu-usuario]/kube-user-admin-frontend:latest
+  ghcr.io/[seu-usuario]/kua-auth-frontend:latest
 ```
 
 ### Docker Compose
@@ -68,11 +68,11 @@ Você pode usar o `docker-compose.yml` existente, mas atualize as imagens:
 version: '3.8'
 services:
   backend:
-    image: ghcr.io/[seu-usuario]/kube-user-admin-backend:latest
+    image: ghcr.io/[seu-usuario]/kua-auth-backend:latest
     # ... resto da configuração
 
   frontend:
-    image: ghcr.io/[seu-usuario]/kube-user-admin-frontend:latest
+    image: ghcr.io/[seu-usuario]/kua-auth-frontend:latest
     # ... resto da configuração
 ```
 

@@ -1,5 +1,5 @@
 {
-  "name": "kube-user-admin-backend",
+  "name": "kua-auth-backend",
   "version": "1.0.0",
   "description": "Backend for Kubernetes User Admin system",
   "main": "src/server.js",

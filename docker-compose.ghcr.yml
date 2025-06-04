@@ -1,6 +1,6 @@
 services:
   backend:
-    image: ghcr.io/${GITHUB_REPOSITORY:-renatoruis/kube-user-admin}-backend:${IMAGE_TAG:-latest}
+    image: ghcr.io/${GITHUB_REPOSITORY:-renatoruis/kua-auth}-backend:${IMAGE_TAG:-latest}
     ports:
       - "3000:3000"
     volumes:
@@ -11,7 +11,7 @@ services:
     restart: unless-stopped
 
   frontend:
-    image: ghcr.io/${GITHUB_REPOSITORY:-renatoruis/kube-user-admin}-frontend:${IMAGE_TAG:-latest}
+    image: ghcr.io/${GITHUB_REPOSITORY:-renatoruis/kua-auth}-frontend:${IMAGE_TAG:-latest}
     ports:
       - "8080:80"
     depends_on:

@@ -19,14 +19,14 @@ print_usage() {
     echo "Usage: $0 [OPTIONS]"
     echo ""
     echo "Options:"
-    echo "  -r, --repository REPO    GitHub repository (e.g., username/kube-user-admin)"
+    echo "  -r, --repository REPO    GitHub repository (e.g., username/kua-auth)"
     echo "  -t, --tag TAG           Image tag (default: latest)"
     echo "  -f, --file FILE         Docker compose file (default: docker-compose.ghcr.yml)"
     echo "  -h, --help              Show this help message"
     echo ""
     echo "Examples:"
-    echo "  $0 -r renatoruis/kube-user-admin -t v1.0.0"
-    echo "  $0 --repository myuser/kube-user-admin --tag main"
+    echo "  $0 -r renatoruis/kua-auth -t v1.0.0"
+    echo "  $0 --repository myuser/kua-auth --tag main"
 }
 
 # Parse command line arguments
@@ -60,7 +60,7 @@ done
 if [[ -z "$GITHUB_REPOSITORY" ]]; then
     echo -e "${RED}Error: GitHub repository is required${NC}"
     echo "Use -r or --repository to specify the repository"
-    echo "Example: -r username/kube-user-admin"
+    echo "Example: -r username/kua-auth"
     exit 1
 fi
 

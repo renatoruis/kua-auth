@@ -15,51 +15,51 @@ Este guia explica como fazer o deploy do Kube User Admin em um cluster Kubernete
 
 ```bash
 # 1. Adicionar o repositório Helm
-helm repo add kube-user-admin https://renatoruis.github.io/kube-user-admin
+helm repo add kua-auth https://renatoruis.github.io/kua-auth
 helm repo update
 
 # 2. Instalar o chart
-helm install kube-user-admin kube-user-admin/kube-user-admin \
-  --namespace kube-user-admin \
+helm install kua-auth kua-auth/kua-auth \
+  --namespace kua-auth \
   --create-namespace
 
 # 3. Verificar o status
-kubectl get pods -n kube-user-admin
+kubectl get pods -n kua-auth
 ```
 
 ### Método 2: OCI Registry (Helm 3.8+)
 
 ```bash
 # 1. Instalar diretamente do GitHub Container Registry
-helm install kube-user-admin oci://ghcr.io/renatoruis/kube-user-admin \
-  --namespace kube-user-admin \
+helm install kua-auth oci://ghcr.io/renatoruis/kua-auth \
+  --namespace kua-auth \
   --create-namespace
 
 # 2. Verificar o status
-kubectl get pods -n kube-user-admin
+kubectl get pods -n kua-auth
 ```
 
 ### Método 3: Chart Local (Desenvolvimento)
 
 ```bash
 # 1. Clone o repositório
-git clone https://github.com/renatoruis/kube-user-admin.git
-cd kube-user-admin
+git clone https://github.com/renatoruis/kua-auth.git
+cd kua-auth
 
 # 2. Instalar o chart
-helm install kube-user-admin ./helm/kube-user-admin \
-  --namespace kube-user-admin \
+helm install kua-auth ./helm/kua-auth \
+  --namespace kua-auth \
   --create-namespace
 
 # 3. Verificar o status
-kubectl get pods -n kube-user-admin
+kubectl get pods -n kua-auth
 ```
 
 ### Acessar a aplicação
 
 ```bash
 # Port-forward para acessar localmente
-kubectl port-forward -n kube-user-admin svc/kube-user-admin-frontend 8080:80
+kubectl port-forward -n kua-auth svc/kua-auth-frontend 8080:80
 
 # Acesse: http://localhost:8080
 ```
@@ -73,7 +73,7 @@ Crie um arquivo `values-custom.yaml`:
 ```yaml
 # values-custom.yaml
 image:
-  repository: renatoruis/kube-user-admin
+  repository: renatoruis/kua-auth
   tag: "v1.0.0"
 
 backend:
@@ -123,14 +123,14 @@ Instalar com configurações customizadas:
 
 ```bash
 # Usando repositório Helm
-helm install kube-user-admin kube-user-admin/kube-user-admin \
-  --namespace kube-user-admin \
+helm install kua-auth kua-auth/kua-auth \
+  --namespace kua-auth \
   --create-namespace \
   --values values-custom.yaml
 
 # Ou usando OCI registry
-helm install kube-user-admin oci://ghcr.io/renatoruis/kube-user-admin \
-  --namespace kube-user-admin \
+helm install kua-auth oci://ghcr.io/renatoruis/kua-auth \
+  --namespace kua-auth \
   --create-namespace \
   --values values-custom.yaml
 ```
@@ -162,7 +162,7 @@ kubectl create secret docker-registry ghcr-secret \
   --docker-server=ghcr.io \
   --docker-username=seu-usuario \
   --docker-password=seu-token \
-  --namespace=kube-user-admin
+  --namespace=kua-auth
 ```
 
 ### 2. Configuração de Storage
@@ -207,12 +207,12 @@ podDisruptionBudget:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: kube-user-admin-netpol
-  namespace: kube-user-admin
+  name: kua-auth-netpol
+  namespace: kua-auth
 spec:
   podSelector:
     matchLabels:
-      app.kubernetes.io/name: kube-user-admin
+      app.kubernetes.io/name: kua-auth
   policyTypes:
   - Ingress
   - Egress
@@ -300,73 +300,73 @@ serviceMonitor:
 helm repo update
 
 # Upgrade para nova versão (repositório Helm)
-helm upgrade kube-user-admin kube-user-admin/kube-user-admin \
-  --namespace kube-user-admin \
+helm upgrade kua-auth kua-auth/kua-auth \
+  --namespace kua-auth \
   --values values-custom.yaml
 
 # Ou upgrade usando OCI registry
-helm upgrade kube-user-admin oci://ghcr.io/renatoruis/kube-user-admin \
-  --namespace kube-user-admin \
+helm upgrade kua-auth oci://ghcr.io/renatoruis/kua-auth \
+  --namespace kua-auth \
   --values values-custom.yaml
 
 # Ver histórico
-helm history kube-user-admin -n kube-user-admin
+helm history kua-auth -n kua-auth
 
 # Rollback se necessário
-helm rollback kube-user-admin 1 -n kube-user-admin
+helm rollback kua-auth 1 -n kua-auth
 ```
 
 ### Backup
 
 ```bash
 # Backup da configuração
-kubectl get all,secrets,configmaps -n kube-user-admin -o yaml > backup-kube-user-admin.yaml
+kubectl get all,secrets,configmaps -n kua-auth -o yaml > backup-kua-auth.yaml
 
 # Backup do Helm release
-helm get values kube-user-admin -n kube-user-admin > backup-values.yaml
+helm get values kua-auth -n kua-auth > backup-values.yaml
 ```
 
 ### Logs
 
 ```bash
 # Ver logs do backend
-kubectl logs -n kube-user-admin -l app.kubernetes.io/component=backend -f
+kubectl logs -n kua-auth -l app.kubernetes.io/component=backend -f
 
 # Ver logs do frontend
-kubectl logs -n kube-user-admin -l app.kubernetes.io/component=frontend -f
+kubectl logs -n kua-auth -l app.kubernetes.io/component=frontend -f
 
 # Ver todos os logs
-kubectl logs -n kube-user-admin -l app.kubernetes.io/name=kube-user-admin -f
+kubectl logs -n kua-auth -l app.kubernetes.io/name=kua-auth -f
 ```
 
 ### Debug
 
 ```bash
 # Verificar recursos
-kubectl get all -n kube-user-admin
+kubectl get all -n kua-auth
 
 # Descrever pods com problemas
-kubectl describe pod -n kube-user-admin -l app.kubernetes.io/component=backend
+kubectl describe pod -n kua-auth -l app.kubernetes.io/component=backend
 
 # Verificar RBAC
-kubectl auth can-i --as=system:serviceaccount:kube-user-admin:kube-user-admin create serviceaccounts
+kubectl auth can-i --as=system:serviceaccount:kua-auth:kua-auth create serviceaccounts
 
 # Testar conectividade
-kubectl run debug --image=nicolaka/netshoot -it --rm --restart=Never -n kube-user-admin
+kubectl run debug --image=nicolaka/netshoot -it --rm --restart=Never -n kua-auth
 ```
 
 ## 🗑️ Desinstalação
 
 ```bash
 # Remover o release
-helm uninstall kube-user-admin -n kube-user-admin
+helm uninstall kua-auth -n kua-auth
 
 # Remover namespace (cuidado: remove todos os recursos)
-kubectl delete namespace kube-user-admin
+kubectl delete namespace kua-auth
 
 # Limpar CRDs se houver
-kubectl delete clusterrole kube-user-admin
-kubectl delete clusterrolebinding kube-user-admin
+kubectl delete clusterrole kua-auth
+kubectl delete clusterrolebinding kua-auth
 ```
 
 ## 🚨 Troubleshooting
@@ -375,23 +375,23 @@ kubectl delete clusterrolebinding kube-user-admin
 
 ```bash
 # Verificar events
-kubectl get events -n kube-user-admin --sort-by='.lastTimestamp'
+kubectl get events -n kua-auth --sort-by='.lastTimestamp'
 
 # Verificar logs de init
-kubectl logs -n kube-user-admin <pod-name> -c <init-container>
+kubectl logs -n kua-auth <pod-name> -c <init-container>
 ```
 
 ### Problema: RBAC negado
 
 ```bash
 # Verificar ServiceAccount
-kubectl get sa -n kube-user-admin
+kubectl get sa -n kua-auth
 
 # Verificar ClusterRoleBinding
-kubectl describe clusterrolebinding kube-user-admin
+kubectl describe clusterrolebinding kua-auth
 
 # Testar permissões
-kubectl auth can-i create serviceaccounts --as=system:serviceaccount:kube-user-admin:kube-user-admin
+kubectl auth can-i create serviceaccounts --as=system:serviceaccount:kua-auth:kua-auth
 ```
 
 ### Problema: Ingress não funciona
@@ -401,10 +401,10 @@ kubectl auth can-i create serviceaccounts --as=system:serviceaccount:kube-user-a
 kubectl get pods -n ingress-nginx
 
 # Verificar ingress
-kubectl describe ingress kube-user-admin -n kube-user-admin
+kubectl describe ingress kua-auth -n kua-auth
 
 # Verificar certificados (se TLS)
-kubectl describe certificate kube-admin-tls -n kube-user-admin
+kubectl describe certificate kube-admin-tls -n kua-auth
 ```
 
 ### Problema: Chart não encontrado
@@ -417,10 +417,10 @@ helm repo list
 helm repo update
 
 # Procurar o chart
-helm search repo kube-user-admin
+helm search repo kua-auth
 
 # Verificar se o OCI registry está acessível
-helm show chart oci://ghcr.io/renatoruis/kube-user-admin
+helm show chart oci://ghcr.io/renatoruis/kua-auth
 ```
 
 ## 📝 Notas Importantes
@@ -435,6 +435,6 @@ helm show chart oci://ghcr.io/renatoruis/kube-user-admin
 
 5. **Secrets**: Use ferramentas como Sealed Secrets ou External Secrets para gerenciar credenciais.
 
-6. **Repositório Helm**: O repositório oficial está disponível em https://renatoruis.github.io/kube-user-admin
+6. **Repositório Helm**: O repositório oficial está disponível em https://renatoruis.github.io/kua-auth
 
 7. **OCI Registry**: Para Helm 3.8+, você pode usar o OCI registry diretamente sem adicionar repositório. 

@@ -352,14 +352,14 @@ const getRoleBindingsForServiceAccount = async (req, res) => {
 const getAllRoleBindingsAndClusterRoleBindings = async (req, res) => {
   try {
     // Get all role bindings managed by our app
-    const roleBindingsOutput = await execKubectl(`get rolebindings --all-namespaces -l app.kubernetes.io/managed-by=kube-user-admin -o json`);
+    const roleBindingsOutput = await execKubectl(`get rolebindings --all-namespaces -l app.kubernetes.io/managed-by=kua-auth -o json`);
     const roleBindingsData = JSON.parse(roleBindingsOutput);
     
     // Get all cluster role bindings managed by our app
-    const clusterRoleBindingsOutput = await execKubectl(`get clusterrolebindings -l app.kubernetes.io/managed-by=kube-user-admin -o json`);
+    const clusterRoleBindingsOutput = await execKubectl(`get clusterrolebindings -l app.kubernetes.io/managed-by=kua-auth -o json`);
     const clusterRoleBindingsData = JSON.parse(clusterRoleBindingsOutput);
     
-    console.log(`Found ${roleBindingsData.items.length} RoleBindings and ${clusterRoleBindingsData.items.length} ClusterRoleBindings managed by kube-user-admin`);
+    console.log(`Found ${roleBindingsData.items.length} RoleBindings and ${clusterRoleBindingsData.items.length} ClusterRoleBindings managed by kua-auth`);
     
     setCacheControlHeaders(res);
     res.status(200).json({

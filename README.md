@@ -30,16 +30,16 @@ A full-stack application for managing Kubernetes users and permissions, generati
 
 ```bash
 # Add the Helm repository
-helm repo add kube-user-admin https://renatoruis.github.io/kube-user-admin
+helm repo add kua-auth https://renatoruis.github.io/kua-auth
 helm repo update
 
 # Install the chart
-helm install kube-user-admin kube-user-admin/kube-user-admin \
-  --namespace kube-user-admin \
+helm install kua-auth kua-auth/kua-auth \
+  --namespace kua-auth \
   --create-namespace
 
 # Access the application
-kubectl port-forward -n kube-user-admin svc/kube-user-admin-frontend 8080:80
+kubectl port-forward -n kua-auth svc/kua-auth-frontend 8080:80
 ```
 
 Access at: http://localhost:8080
@@ -48,35 +48,35 @@ Access at: http://localhost:8080
 
 ```bash
 # Install directly from GitHub Container Registry
-helm install kube-user-admin oci://ghcr.io/renatoruis/kube-user-admin \
-  --namespace kube-user-admin \
+helm install kua-auth oci://ghcr.io/renatoruis/kua-auth \
+  --namespace kua-auth \
   --create-namespace
 
 # Access the application
-kubectl port-forward -n kube-user-admin svc/kube-user-admin-frontend 8080:80
+kubectl port-forward -n kua-auth svc/kua-auth-frontend 8080:80
 ```
 
 ### Option 3: Local Chart (Development)
 
 ```bash
 # Clone the repository
-git clone https://github.com/renatoruis/kube-user-admin.git
-cd kube-user-admin
+git clone https://github.com/renatoruis/kua-auth.git
+cd kua-auth
 
 # Deploy with Helm
-helm install kube-user-admin ./helm/kube-user-admin \
-  --namespace kube-user-admin \
+helm install kua-auth ./helm/kua-auth \
+  --namespace kua-auth \
   --create-namespace
 
 # Access the application
-kubectl port-forward -n kube-user-admin svc/kube-user-admin-frontend 8080:80
+kubectl port-forward -n kua-auth svc/kua-auth-frontend 8080:80
 ```
 
 ### Option 4: Docker with Pre-built Images
 
 ```bash
 # 1. Set your GitHub repository
-export GITHUB_REPOSITORY=renatoruis/kube-user-admin
+export GITHUB_REPOSITORY=renatoruis/kua-auth
 
 # 2. Copy your kubeconfig
 mkdir -p kubeconfig
@@ -95,8 +95,8 @@ Access at: http://localhost:8080
 
 ```bash
 # 1. Clone and setup
-git clone https://github.com/renatoruis/kube-user-admin.git
-cd kube-user-admin
+git clone https://github.com/renatoruis/kua-auth.git
+cd kua-auth
 
 # 2. Install dependencies
 make install
@@ -113,12 +113,12 @@ Access at: http://localhost:8080
 ## 📦 Available Packages
 
 ### 🎯 Helm Charts
-- **Helm Repository**: https://renatoruis.github.io/kube-user-admin
-- **OCI Registry**: `oci://ghcr.io/renatoruis/kube-user-admin`
+- **Helm Repository**: https://renatoruis.github.io/kua-auth
+- **OCI Registry**: `oci://ghcr.io/renatoruis/kua-auth`
 
 ### 🐳 Docker Images
-- **Frontend**: `ghcr.io/renatoruis/kube-user-admin-frontend`
-- **Backend**: `ghcr.io/renatoruis/kube-user-admin-backend`
+- **Frontend**: `ghcr.io/renatoruis/kua-auth-frontend`
+- **Backend**: `ghcr.io/renatoruis/kua-auth-backend`
 
 ### Available Tags
 - `latest` - Latest stable version from main branch
@@ -129,10 +129,10 @@ Access at: http://localhost:8080
 ## 📁 Project Structure
 
 ```
-kube-user-admin/
+kua-auth/
 ├── .github/workflows/   # GitHub Actions CI/CD
 ├── helm/                # Helm chart for Kubernetes deployment
-│   └── kube-user-admin/ # Main chart
+│   └── kua-auth/ # Main chart
 ├── backend/             # Node.js + Express API server
 │   ├── src/             # Backend source code
 │   │   ├── controllers/ # API controllers
@@ -181,8 +181,8 @@ See [DOCKER_DEPLOYMENT.md](DOCKER_DEPLOYMENT.md) for complete guide.
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/renatoruis/kube-user-admin.git
-cd kube-user-admin
+git clone https://github.com/renatoruis/kua-auth.git
+cd kua-auth
 ```
 
 2. Copy your Kubernetes admin kubeconfig to the appropriate location:
@@ -282,10 +282,10 @@ For production use, consider adding:
 
 ## 📚 Documentation
 
-- [🎯 Helm Chart Repository](https://renatoruis.github.io/kube-user-admin) - Public Helm repository
+- [🎯 Helm Chart Repository](https://renatoruis.github.io/kua-auth) - Public Helm repository
 - [🚀 Kubernetes Deployment Guide](KUBERNETES_DEPLOYMENT.md) - Complete guide for production deployment
 - [🐳 Docker Deployment Guide](DOCKER_DEPLOYMENT.md) - Docker and container deployment
-- [⚙️ Helm Chart Documentation](helm/kube-user-admin/README.md) - Detailed chart configuration
+- [⚙️ Helm Chart Documentation](helm/kua-auth/README.md) - Detailed chart configuration
 - [🔄 GitHub Actions CI/CD](.github/workflows/build-and-push.yml) - Automated build and deployment
 
 ## 🤝 Contributing

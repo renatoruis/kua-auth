@@ -2,16 +2,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "kube-user-admin.fullname" . }}-backend
+  name: {{ include "kua-auth.fullname" . }}-backend
   labels:
-    {{- include "kube-user-admin.backend.labels" . | nindent 4 }}
+    {{- include "kua-auth.backend.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.backend.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "kube-user-admin.backend.selectorLabels" . | nindent 6 }}
+      {{- include "kua-auth.backend.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -19,7 +19,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "kube-user-admin.backend.selectorLabels" . | nindent 8 }}
+        {{- include "kua-auth.backend.selectorLabels" . | nindent 8 }}
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -28,14 +28,14 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "kube-user-admin.serviceAccountName" . }}
+      serviceAccountName: {{ include "kua-auth.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.backend.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Values.backend.name }}
           securityContext:
             {{- toYaml .Values.backend.securityContext | nindent 12 }}
-          image: {{ include "kube-user-admin.backend.image" . }}
+          image: {{ include "kua-auth.backend.image" . }}
           imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
           ports:
             - name: {{ .Values.backend.service.name }}

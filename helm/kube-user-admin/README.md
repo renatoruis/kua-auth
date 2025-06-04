@@ -5,8 +5,8 @@ This Helm chart deploys Kube User Admin, a full-stack application for managing K
 ## TL;DR
 
 ```bash
-helm install kube-user-admin ./helm/kube-user-admin \
-  --namespace kube-user-admin \
+helm install kua-auth ./helm/kua-auth \
+  --namespace kua-auth \
   --create-namespace
 ```
 
@@ -25,8 +25,8 @@ This chart bootstraps a Kube User Admin deployment on a Kubernetes cluster using
 To install the chart with the release name `my-release`:
 
 ```bash
-helm install my-release ./helm/kube-user-admin \
-  --namespace kube-user-admin \
+helm install my-release ./helm/kua-auth \
+  --namespace kua-auth \
   --create-namespace
 ```
 
@@ -37,7 +37,7 @@ The command deploys Kube User Admin on the Kubernetes cluster in the default con
 To uninstall/delete the `my-release` deployment:
 
 ```bash
-helm uninstall my-release --namespace kube-user-admin
+helm uninstall my-release --namespace kua-auth
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -56,7 +56,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                               | Description                                     | Value                           |
 | ---------------------------------- | ----------------------------------------------- | ------------------------------- |
 | `image.registry`                   | Image registry                                  | `ghcr.io`                       |
-| `image.repository`                 | Image repository                                | `renatoruis/kube-user-admin`    |
+| `image.repository`                 | Image repository                                | `renatoruis/kua-auth`    |
 | `image.tag`                        | Image tag                                       | `latest`                        |
 | `image.pullPolicy`                 | Image pull policy                               | `IfNotPresent`                  |
 
@@ -86,7 +86,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backend.service.type`             | Backend service type                           | `ClusterIP` |
 | `backend.service.port`             | Backend service port                           | `3000`     |
 | `backend.env.ADMIN_PASSWORD`       | Admin password                                 | `admin`    |
-| `backend.env.JWT_SECRET`           | JWT secret key                                 | `kube-user-admin-secret-change-in-production` |
+| `backend.env.JWT_SECRET`           | JWT secret key                                 | `kua-auth-secret-change-in-production` |
 | `backend.resources.limits.cpu`     | Backend CPU limit                              | `500m`     |
 | `backend.resources.limits.memory`  | Backend memory limit                           | `512Mi`    |
 
@@ -127,8 +127,8 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Basic Installation
 
 ```bash
-helm install kube-user-admin ./helm/kube-user-admin \
-  --namespace kube-user-admin \
+helm install kua-auth ./helm/kua-auth \
+  --namespace kua-auth \
   --create-namespace
 ```
 
@@ -176,8 +176,8 @@ autoscaling:
 ```
 
 ```bash
-helm install kube-user-admin ./helm/kube-user-admin \
-  --namespace kube-user-admin \
+helm install kua-auth ./helm/kua-auth \
+  --namespace kua-auth \
   --create-namespace \
   --values values-prod.yaml
 ```
@@ -212,7 +212,7 @@ affinity:
           - key: app.kubernetes.io/name
             operator: In
             values:
-            - kube-user-admin
+            - kua-auth
         topologyKey: kubernetes.io/hostname
 ```
 
@@ -221,8 +221,8 @@ affinity:
 To upgrade the release:
 
 ```bash
-helm upgrade kube-user-admin ./helm/kube-user-admin \
-  --namespace kube-user-admin \
+helm upgrade kua-auth ./helm/kua-auth \
+  --namespace kua-auth \
   --values values-prod.yaml
 ```
 
@@ -238,17 +238,17 @@ helm upgrade kube-user-admin ./helm/kube-user-admin \
 
 ### Check pod status
 ```bash
-kubectl get pods -n kube-user-admin
+kubectl get pods -n kua-auth
 ```
 
 ### View logs
 ```bash
-kubectl logs -n kube-user-admin -l app.kubernetes.io/name=kube-user-admin
+kubectl logs -n kua-auth -l app.kubernetes.io/name=kua-auth
 ```
 
 ### Debug RBAC issues
 ```bash
-kubectl auth can-i create serviceaccounts --as=system:serviceaccount:kube-user-admin:kube-user-admin
+kubectl auth can-i create serviceaccounts --as=system:serviceaccount:kua-auth:kua-auth
 ```
 
 ## License

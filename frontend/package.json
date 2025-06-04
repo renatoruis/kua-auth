@@ -1,5 +1,5 @@
 {
-  "name": "kube-user-admin-frontend",
+  "name": "kua-auth-frontend",
   "version": "1.0.0",
   "description": "Frontend for Kubernetes User Admin system",
   "scripts": {

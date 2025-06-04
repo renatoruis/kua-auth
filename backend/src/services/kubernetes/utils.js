@@ -3,9 +3,9 @@ const path = require('path');
 const { exec } = require('child_process');
 
 // Constants for resource management
-const MANAGED_BY_LABEL = 'app.kubernetes.io/managed-by=kube-user-admin';
-const DEFAULT_APP_NAMESPACE = process.env.DEFAULT_NAMESPACE || 'kube-user-admin';
-const RESOURCE_LABEL = { 'app.kubernetes.io/managed-by': 'kube-user-admin' };
+const MANAGED_BY_LABEL = 'app.kubernetes.io/managed-by=kua-auth';
+const DEFAULT_APP_NAMESPACE = process.env.DEFAULT_NAMESPACE || 'kua-auth';
+const RESOURCE_LABEL = { 'app.kubernetes.io/managed-by': 'kua-auth' };
 
 // Initialize Kubernetes configuration
 const kubeconfig = process.env.KUBECONFIG
@@ -36,7 +36,7 @@ const execKubectl = async (command) => {
 // Create temporary file for kubectl apply
 const createTempFile = (name, content) => {
   // Usar o diretório /tmp do sistema em vez do diretório do projeto
-  const tmpDir = '/tmp/kube-user-admin';
+  const tmpDir = '/tmp/kua-auth';
   
   // Ensure tmp directory exists
   if (!fs.existsSync(tmpDir)) {
