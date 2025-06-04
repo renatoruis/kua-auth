@@ -6,10 +6,10 @@ entries:
       licenses: MIT
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-06-04T17:06:49.07374-03:00"
+    created: "2025-06-04T17:23:13.218167-03:00"
     description: A Helm chart for Kubernetes User Admin - Full-stack application for
       managing Kubernetes users and permissions
-    digest: 229e93f0e8b44b68eb0bb5c690fb807ff8074f8d5a920665f79dab03b71d66b3
+    digest: f91b81435898f462e8ec5021a443cff1ca9806f4e86bbacb2bb198787103f380
     home: https://github.com/renatoruis/kua-auth
     keywords:
     - kubernetes
@@ -28,4 +28,4 @@ entries:
     urls:
     - https://renatoruis.github.io/kua-auth/kua-auth-1.0.0.tgz
     version: 1.0.0
-generated: "2025-06-04T17:06:49.072119-03:00"
+generated: "2025-06-04T17:23:13.216911-03:00"
