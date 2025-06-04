@@ -1,0 +1,22 @@
+apiVersion: v2
+name: kua-auth
+description: A Helm chart for Kubernetes User Admin - Full-stack application for managing Kubernetes users and permissions
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - kubernetes
+  - rbac
+  - user-management
+  - admin
+  - kubeconfig
+  - serviceaccount
+home: https://github.com/renatoruis/kua-auth
+sources:
+  - https://github.com/renatoruis/kua-auth
+maintainers:
+  - name: Renato Ruis
+    email: renato@example.com
+annotations:
+  category: Security
+  licenses: MIT 
