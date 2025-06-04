@@ -1,0 +1,26 @@
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+      - ./kubeconfig:/app/config/kubeconfig
+    environment:
+      - NODE_ENV=production
+      - KUBECONFIG=/app/config/kubeconfig
+    restart: unless-stopped
+
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+
+
