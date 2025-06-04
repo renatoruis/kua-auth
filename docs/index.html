@@ -88,12 +88,12 @@
         
         <div class="code-block">
             <pre># Add the Helm repository
-helm repo add kube-user-admin https://renatoruis.github.io/kube-user-admin
+helm repo add kua-auth https://renatoruis.github.io/kua-auth
 helm repo update
 
 # Install the chart
-helm install kube-user-admin kube-user-admin/kube-user-admin \
-  --namespace kube-user-admin \
+helm install kua-auth kua-auth/kua-auth \
+  --namespace kua-auth \
   --create-namespace</pre>
         </div>
 
@@ -101,8 +101,8 @@ helm install kube-user-admin kube-user-admin/kube-user-admin \
         
         <div class="code-block">
             <pre># Install with custom values
-helm install kube-user-admin kube-user-admin/kube-user-admin \
-  --namespace kube-user-admin \
+helm install kua-auth kua-auth/kua-auth \
+  --namespace kua-auth \
   --create-namespace \
   --set backend.env.ADMIN_PASSWORD="your-secure-password" \
   --set ingress.enabled=true \
@@ -111,10 +111,10 @@ helm install kube-user-admin kube-user-admin/kube-user-admin \
 
         <h2>📚 Documentation</h2>
         <ul>
-            <li><a href="https://github.com/renatoruis/kube-user-admin">📖 Main Repository</a></li>
-            <li><a href="https://github.com/renatoruis/kube-user-admin/blob/main/KUBERNETES_DEPLOYMENT.md">🚀 Kubernetes Deployment Guide</a></li>
-            <li><a href="https://github.com/renatoruis/kube-user-admin/blob/main/helm/kube-user-admin/README.md">⚙️ Helm Chart Documentation</a></li>
-            <li><a href="https://github.com/renatoruis/kube-user-admin/blob/main/DOCKER_DEPLOYMENT.md">🐳 Docker Deployment Guide</a></li>
+            <li><a href="https://github.com/renatoruis/kua-auth">📖 Main Repository</a></li>
+            <li><a href="https://github.com/renatoruis/kua-auth/blob/main/KUBERNETES_DEPLOYMENT.md">🚀 Kubernetes Deployment Guide</a></li>
+            <li><a href="https://github.com/renatoruis/kua-auth/blob/main/helm/kua-auth/README.md">⚙️ Helm Chart Documentation</a></li>
+            <li><a href="https://github.com/renatoruis/kua-auth/blob/main/DOCKER_DEPLOYMENT.md">🐳 Docker Deployment Guide</a></li>
         </ul>
 
         <h2>🔍 Available Charts</h2>
@@ -127,12 +127,12 @@ helm install kube-user-admin kube-user-admin/kube-user-admin \
         </div>
 
         <h2>🤝 Contributing</h2>
-        <p>Found a bug or want to contribute? Visit our <a href="https://github.com/renatoruis/kube-user-admin">GitHub repository</a> to get started!</p>
+        <p>Found a bug or want to contribute? Visit our <a href="https://github.com/renatoruis/kua-auth">GitHub repository</a> to get started!</p>
         
         <hr style="margin: 30px 0;">
         <p style="text-align: center; color: #666; font-size: 0.9em;">
             Made with ❤️ for the Kubernetes community | 
-            <a href="https://github.com/renatoruis/kube-user-admin/blob/main/LICENSE">MIT License</a>
+            <a href="https://github.com/renatoruis/kua-auth/blob/main/LICENSE">MIT License</a>
         </p>
     </div>
 
@@ -143,11 +143,11 @@ helm install kube-user-admin kube-user-admin/kube-user-admin \
             .then(data => {
                 // Parse basic info from YAML (simple regex for demo)
                 const chartsDiv = document.getElementById('charts-list');
-                if (data.includes('kube-user-admin')) {
+                if (data.includes('kua-auth')) {
                     chartsDiv.innerHTML = `
                         <div class="success">
-                            <strong>✅ kube-user-admin</strong> - Available for installation<br>
-                            <small>Use: <code>helm install kube-user-admin kube-user-admin/kube-user-admin</code></small>
+                            <strong>✅ kua-auth</strong> - Available for installation<br>
+                            <small>Use: <code>helm install kua-auth kua-auth/kua-auth</code></small>
                         </div>
                     `;
                 } else {
