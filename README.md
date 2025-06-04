@@ -24,29 +24,68 @@ A full-stack application for managing Kubernetes users and permissions, generati
 - A running Kubernetes cluster
 - Kubeconfig with admin access
 
+## 🚀 Quick Start with Pre-built Images
+
+The easiest way to run this application is using our pre-built Docker images from GitHub Container Registry:
+
+```bash
+# 1. Set your GitHub repository
+export GITHUB_REPOSITORY=your-username/kube-user-admin
+
+# 2. Copy your kubeconfig
+mkdir -p kubeconfig
+cp ~/.kube/config kubeconfig/
+
+# 3. Deploy using pre-built images
+./scripts/deploy.sh -r $GITHUB_REPOSITORY
+
+# Or manually with docker-compose
+docker-compose -f docker-compose.ghcr.yml up -d
+```
+
+Access the application at http://localhost:8080
+
+## 🐳 Docker Images
+
+This project automatically builds and publishes Docker images to GitHub Container Registry (GHCR) via GitHub Actions:
+
+- **Frontend**: `ghcr.io/your-username/kube-user-admin-frontend`
+- **Backend**: `ghcr.io/your-username/kube-user-admin-backend`
+
+### Available Tags
+- `latest` - Latest stable version from main branch
+- `main` - Latest from main branch
+- `develop` - Latest from develop branch
+- `v1.0.0` - Specific version releases
+
+For detailed Docker deployment instructions, see [DOCKER_DEPLOYMENT.md](DOCKER_DEPLOYMENT.md).
+
 ## Project Structure
 
 ```
 kube-user-admin/
-├── backend/         # Node.js + Express API server
-│   ├── src/         # Backend source code
-│   │   ├── controllers/  # API controllers
-│   │   ├── routes/       # API routes
-│   │   ├── services/     # Business logic
-│   │   └── server.js     # Entry point
-│   ├── Dockerfile        # Backend Docker config
-│   └── package.json      # Backend dependencies
-├── frontend/        # Vue.js 3 SPA
-│   ├── src/         # Frontend source code
-│   │   ├── components/   # Reusable UI components
-│   │   ├── views/        # Page components
-│   │   ├── services/     # API client
-│   │   ├── router/       # Vue Router config
-│   │   └── assets/       # Static assets
-│   ├── Dockerfile        # Frontend Docker config
-│   └── package.json      # Frontend dependencies
-├── docker-compose.yml    # Docker Compose config
-└── Makefile              # Development helper commands
+├── .github/workflows/   # GitHub Actions CI/CD
+├── backend/             # Node.js + Express API server
+│   ├── src/             # Backend source code
+│   │   ├── controllers/ # API controllers
+│   │   ├── routes/      # API routes
+│   │   ├── services/    # Business logic
+│   │   └── server.js    # Entry point
+│   ├── Dockerfile       # Backend Docker config
+│   └── package.json     # Backend dependencies
+├── frontend/            # Vue.js 3 SPA
+│   ├── src/             # Frontend source code
+│   │   ├── components/  # Reusable UI components
+│   │   ├── views/       # Page components
+│   │   ├── services/    # API client
+│   │   ├── router/      # Vue Router config
+│   │   └── assets/      # Static assets
+│   ├── Dockerfile       # Frontend Docker config
+│   └── package.json     # Frontend dependencies
+├── scripts/             # Deployment and utility scripts
+├── docker-compose.yml   # Local development
+├── docker-compose.ghcr.yml # Production with GHCR images
+└── Makefile             # Development helper commands
 ```
 
 ## Setup Instructions (MacOS ARM/M1+)

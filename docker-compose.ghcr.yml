@@ -1,0 +1,19 @@
+services:
+  backend:
+    image: ghcr.io/${GITHUB_REPOSITORY:-your-username/kube-user-admin}-backend:${IMAGE_TAG:-latest}
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./kubeconfig:/app/config/kubeconfig
+    environment:
+      - NODE_ENV=production
+      - KUBECONFIG=/app/config/kubeconfig
+    restart: unless-stopped
+
+  frontend:
+    image: ghcr.io/${GITHUB_REPOSITORY:-your-username/kube-user-admin}-frontend:${IMAGE_TAG:-latest}
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    restart: unless-stopped 
