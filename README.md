@@ -24,13 +24,59 @@ A full-stack application for managing Kubernetes users and permissions, generati
 - A running Kubernetes cluster
 - Kubeconfig with admin access
 
-## 🚀 Quick Start with Pre-built Images
+## 🚀 Quick Start Options
 
-The easiest way to run this application is using our pre-built Docker images from GitHub Container Registry:
+### Option 1: Helm Repository (Recommended for Production)
+
+```bash
+# Add the Helm repository
+helm repo add kube-user-admin https://renatoruis.github.io/kube-user-admin
+helm repo update
+
+# Install the chart
+helm install kube-user-admin kube-user-admin/kube-user-admin \
+  --namespace kube-user-admin \
+  --create-namespace
+
+# Access the application
+kubectl port-forward -n kube-user-admin svc/kube-user-admin-frontend 8080:80
+```
+
+Access at: http://localhost:8080
+
+### Option 2: OCI Registry (Helm 3.8+)
+
+```bash
+# Install directly from GitHub Container Registry
+helm install kube-user-admin oci://ghcr.io/renatoruis/kube-user-admin \
+  --namespace kube-user-admin \
+  --create-namespace
+
+# Access the application
+kubectl port-forward -n kube-user-admin svc/kube-user-admin-frontend 8080:80
+```
+
+### Option 3: Local Chart (Development)
+
+```bash
+# Clone the repository
+git clone https://github.com/renatoruis/kube-user-admin.git
+cd kube-user-admin
+
+# Deploy with Helm
+helm install kube-user-admin ./helm/kube-user-admin \
+  --namespace kube-user-admin \
+  --create-namespace
+
+# Access the application
+kubectl port-forward -n kube-user-admin svc/kube-user-admin-frontend 8080:80
+```
+
+### Option 4: Docker with Pre-built Images
 
 ```bash
 # 1. Set your GitHub repository
-export GITHUB_REPOSITORY=your-username/kube-user-admin
+export GITHUB_REPOSITORY=renatoruis/kube-user-admin
 
 # 2. Copy your kubeconfig
 mkdir -p kubeconfig
@@ -43,14 +89,36 @@ cp ~/.kube/config kubeconfig/
 docker-compose -f docker-compose.ghcr.yml up -d
 ```
 
-Access the application at http://localhost:8080
+Access at: http://localhost:8080
 
-## 🐳 Docker Images
+### Option 5: Local Development
 
-This project automatically builds and publishes Docker images to GitHub Container Registry (GHCR) via GitHub Actions:
+```bash
+# 1. Clone and setup
+git clone https://github.com/renatoruis/kube-user-admin.git
+cd kube-user-admin
 
-- **Frontend**: `ghcr.io/your-username/kube-user-admin-frontend`
-- **Backend**: `ghcr.io/your-username/kube-user-admin-backend`
+# 2. Install dependencies
+make install
+
+# 3. Start backend (terminal 1)
+make dev-backend
+
+# 4. Start frontend (terminal 2)
+make dev-frontend
+```
+
+Access at: http://localhost:8080
+
+## 📦 Available Packages
+
+### 🎯 Helm Charts
+- **Helm Repository**: https://renatoruis.github.io/kube-user-admin
+- **OCI Registry**: `oci://ghcr.io/renatoruis/kube-user-admin`
+
+### 🐳 Docker Images
+- **Frontend**: `ghcr.io/renatoruis/kube-user-admin-frontend`
+- **Backend**: `ghcr.io/renatoruis/kube-user-admin-backend`
 
 ### Available Tags
 - `latest` - Latest stable version from main branch
@@ -58,13 +126,13 @@ This project automatically builds and publishes Docker images to GitHub Containe
 - `develop` - Latest from develop branch
 - `v1.0.0` - Specific version releases
 
-For detailed Docker deployment instructions, see [DOCKER_DEPLOYMENT.md](DOCKER_DEPLOYMENT.md).
-
-## Project Structure
+## 📁 Project Structure
 
 ```
 kube-user-admin/
 ├── .github/workflows/   # GitHub Actions CI/CD
+├── helm/                # Helm chart for Kubernetes deployment
+│   └── kube-user-admin/ # Main chart
 ├── backend/             # Node.js + Express API server
 │   ├── src/             # Backend source code
 │   │   ├── controllers/ # API controllers
@@ -88,13 +156,32 @@ kube-user-admin/
 └── Makefile             # Development helper commands
 ```
 
+## 🚀 Deployment Options
+
+### 1. Kubernetes (Production)
+- **Helm Repository**: Install from public Helm repository
+- **OCI Registry**: Install from GitHub Container Registry
+- **Local Chart**: Use local chart for development
+- **High Availability**: Support for multiple replicas and autoscaling
+- **Security**: Network policies and pod security contexts
+- **Monitoring**: Health checks and metrics endpoints
+
+See [KUBERNETES_DEPLOYMENT.md](KUBERNETES_DEPLOYMENT.md) for complete guide.
+
+### 2. Docker (Development/Testing)
+- **Docker Compose**: Quick local setup with docker-compose
+- **Pre-built Images**: Use images from GHCR
+- **Custom Images**: Build your own images locally
+
+See [DOCKER_DEPLOYMENT.md](DOCKER_DEPLOYMENT.md) for complete guide.
+
 ## Setup Instructions (MacOS ARM/M1+)
 
 ### Running with Docker Compose
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/kube-user-admin.git
+git clone https://github.com/renatoruis/kube-user-admin.git
 cd kube-user-admin
 ```
 
@@ -191,4 +278,24 @@ For production use, consider adding:
 - Authentication/authorization for the application itself
 - Persistent storage for audit logs
 - HTTPS for all connections
-- Network policies to restrict access 
+- Network policies to restrict access
+
+## 📚 Documentation
+
+- [🎯 Helm Chart Repository](https://renatoruis.github.io/kube-user-admin) - Public Helm repository
+- [🚀 Kubernetes Deployment Guide](KUBERNETES_DEPLOYMENT.md) - Complete guide for production deployment
+- [🐳 Docker Deployment Guide](DOCKER_DEPLOYMENT.md) - Docker and container deployment
+- [⚙️ Helm Chart Documentation](helm/kube-user-admin/README.md) - Detailed chart configuration
+- [🔄 GitHub Actions CI/CD](.github/workflows/build-and-push.yml) - Automated build and deployment
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details. 

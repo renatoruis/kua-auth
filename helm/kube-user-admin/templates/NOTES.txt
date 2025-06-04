@@ -1,0 +1,47 @@
+🚀 Kube User Admin has been successfully deployed!
+
+1. Get the application URL by running these commands:
+{{- if .Values.ingress.enabled }}
+{{- range $host := .Values.ingress.hosts }}
+  {{- range .paths }}
+  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}{{ .path }}
+  {{- end }}
+{{- end }}
+{{- else if contains "NodePort" .Values.frontend.service.type }}
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "kube-user-admin.fullname" . }}-frontend)
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo http://$NODE_IP:$NODE_PORT
+{{- else if contains "LoadBalancer" .Values.frontend.service.type }}
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "kube-user-admin.fullname" . }}-frontend'
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "kube-user-admin.fullname" . }}-frontend --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  echo http://$SERVICE_IP:{{ .Values.frontend.service.port }}
+{{- else if contains "ClusterIP" .Values.frontend.service.type }}
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl --namespace {{ .Release.Namespace }} port-forward svc/{{ include "kube-user-admin.fullname" . }}-frontend 8080:{{ .Values.frontend.service.port }}
+{{- end }}
+
+2. Default admin credentials:
+  Username: admin
+  Password: {{ .Values.backend.env.ADMIN_PASSWORD | default "admin" }}
+
+3. Important Security Notes:
+  - This application has cluster-admin privileges
+  - Change the default admin password in production
+  - Consider enabling ingress with TLS for secure access
+  - Review RBAC permissions for your security requirements
+
+4. Useful commands:
+  # View application logs
+  kubectl logs -n {{ .Release.Namespace }} -l app.kubernetes.io/name={{ include "kube-user-admin.name" . }} -f
+
+  # Get all resources
+  kubectl get all -n {{ .Release.Namespace }}
+
+  # Scale the application
+  kubectl scale deployment {{ include "kube-user-admin.fullname" . }}-backend --replicas=2 -n {{ .Release.Namespace }}
+  kubectl scale deployment {{ include "kube-user-admin.fullname" . }}-frontend --replicas=2 -n {{ .Release.Namespace }}
+
+5. Documentation:
+  - Kubernetes Deployment Guide: https://github.com/renatoruis/kube-user-admin/blob/main/KUBERNETES_DEPLOYMENT.md
+  - Docker Deployment Guide: https://github.com/renatoruis/kube-user-admin/blob/main/DOCKER_DEPLOYMENT.md 

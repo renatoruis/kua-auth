@@ -1,0 +1,22 @@
+apiVersion: v2
+name: kube-user-admin
+description: A Helm chart for Kubernetes User Admin - Full-stack application for managing Kubernetes users and permissions
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - kubernetes
+  - rbac
+  - user-management
+  - admin
+  - kubeconfig
+  - serviceaccount
+home: https://github.com/renatoruis/kube-user-admin
+sources:
+  - https://github.com/renatoruis/kube-user-admin
+maintainers:
+  - name: Renato Ruis
+    email: renato@example.com
+annotations:
+  category: Security
+  licenses: MIT 
