@@ -254,3 +254,5 @@ kubectl auth can-i create serviceaccounts --as=system:serviceaccount:kube-user-a
 ## License
 
 This Helm chart is licensed under the MIT License. 
+
+God is Good!
